@@ -160,14 +160,14 @@ spec:
         image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.2.1
         ports:
         - containerPort: 8080
-        readinessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
-        livenessProbe:
-          periodSeconds: 5
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8080"]
+        #readinessProbe:
+        #  periodSeconds: 5
+        #  exec:
+        #    command: ["/bin/grpc_health_probe", "-addr=:8080"]
+        #livenessProbe:
+        #  periodSeconds: 5
+        #  exec:
+        #    command: ["/bin/grpc_health_probe", "-addr=:8080"]
         env:
         - name: PORT
           value: "8080"
@@ -286,15 +286,35 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    alb.ingress.kubernetes.io/target-type: ip
   name: frontend-external
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: frontend
   ports:
   - name: http
     port: 80
     targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+  labels:
+    app: frontend
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: frontend-external
+          servicePort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
