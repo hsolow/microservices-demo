@@ -219,10 +219,10 @@ spec:
       containers:
         - name: server
           image: gcr.io/google-samples/microservices-demo/frontend:v0.2.1
-          securityContext:
-            capabilities:
-              add:
-              - SYS_PTRACE
+#          securityContext:
+#            capabilities:
+#              add:
+#              - SYS_PTRACE
           ports:
           - containerPort: 8080
 #          readinessProbe:
