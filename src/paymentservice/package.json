@@ -17,7 +17,9 @@
     "@grpc/proto-loader": "^0.1.0",
     "grpc": "^1.22.2",
     "pino": "^5.6.2",
+    "protobufjs": "^7.6.1",
     "simple-card-validator": "^1.1.0",
+    "tar": "^7.5.16",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
